@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "265322483216",
+    "project_id": "musicplayercoursework",
+    "storage_bucket": "musicplayercoursework.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265322483216:android:3fee22f3e4a1a0de068495",
+        "android_client_info": {
+          "package_name": "com.example.musicplayercoursework"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLnA2wTj_vhuvoZyKQ4Ls3BDoFpZmOjWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
