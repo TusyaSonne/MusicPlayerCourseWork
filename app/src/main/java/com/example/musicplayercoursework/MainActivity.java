@@ -2,7 +2,10 @@ package com.example.musicplayercoursework;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -11,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayercoursework.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -51,7 +56,39 @@ public class MainActivity extends AppCompatActivity {
         setupSection("section_2", binding.section2MainLayout, binding.section2Title, binding.section2RecyclerView);
         setupSection("section_3", binding.section3MainLayout, binding.section3Title, binding.section3RecyclerView);
         mostlyPlayed("mostly_played", binding.mostlyPlayedMainLayout, binding.mostlyPlayedTitle, binding.mostlyPlayedRecyclerView);
+
+        binding.optionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu();
+            }
+        });
     }
+
+    void showPopupMenu() {
+        PopupMenu popupMenu = new PopupMenu(this, binding.optionBtn);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.option_menu, popupMenu.getMenu());
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.logout) {
+                    logout();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    void logout() {
+        MyExoplayer.getInstance().release();
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
+    }
+
 
     @Override
     protected void onResume() {

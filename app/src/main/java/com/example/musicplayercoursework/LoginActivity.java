@@ -13,33 +13,31 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.musicplayercoursework.databinding.ActivitySignupBinding;
+import com.example.musicplayercoursework.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
 
-public class SignupActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    ActivitySignupBinding binding;
 
+    ActivityLoginBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySignupBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        binding.createAccountBtn.setOnClickListener(new View.OnClickListener() {
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = binding.emailEditText.getText().toString();
                 String password = binding.passwordEditText.getText().toString();
-                String confirmPassword = binding.confirmPasswordEditText.getText().toString();
 
                 if (!Pattern.matches(Patterns.EMAIL_ADDRESS.pattern(), email)) {
                     binding.emailEditText.setError("Неверный email");
@@ -51,50 +49,56 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (!password.equals(confirmPassword)) {
-                    binding.confirmPasswordEditText.setError("Пароли не совпадают");
-                    return;
-                }
-
-                createAccountWithFirebase(email, password);
+                loginWithFirebase(email, password);
             }
         });
 
-        binding.gotoLoginBtn.setOnClickListener(new View.OnClickListener() {
+        binding.gotoSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
-
     }
 
-    void createAccountWithFirebase(String email, String password) {
+    void setInProgress(Boolean inProgress) {
+        if(inProgress) {
+            binding.loginBtn.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+        } else {
+            binding.loginBtn.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    void loginWithFirebase(String email, String password) {
         setInProgress(true);
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         setInProgress(false);
-                        Toast.makeText(getApplicationContext(), "Аккаунт успешно зарегистрирован", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
                         finish();
+                        Toast.makeText(getApplicationContext(), "Вы успешно вошли", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         setInProgress(false);
-                        Toast.makeText(getApplicationContext(), "Ошибка создания аккаунта", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ошибка авторизации", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    void setInProgress(Boolean inProgress) {
-        if(inProgress) {
-            binding.createAccountBtn.setVisibility(View.GONE);
-            binding.progressBar.setVisibility(View.VISIBLE);
-        } else {
-            binding.createAccountBtn.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.GONE);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
     }
 }
