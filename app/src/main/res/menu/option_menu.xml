@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
 
-    <item android:id="@+id/logout"
-        android:title="Выйти" />
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/home"
+            android:title="Главная"
+            android:icon="@drawable/baseline_home_24"/>
+
+        <item android:id="@+id/about_program"
+            android:title="О программе"
+            android:icon="@drawable/baseline_build_circle_24"/>
+
+        <item android:id="@+id/about_author"
+            android:title="Об авторе"
+            android:icon="@drawable/baseline_logo_dev_24"/>
+    </group>
+
+    <item
+        android:title="">
+
+        <menu>
+            <item android:id="@+id/logout"
+                android:title="Выйти"
+                android:icon="@drawable/baseline_logout_24"/>
+        </menu>
+    </item>
+
 </menu>

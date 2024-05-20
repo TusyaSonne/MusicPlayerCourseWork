@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayercoursework.SongsListActivity;
@@ -61,7 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
             // Использование библиотеки Glide для загрузки и отображения изображений
             Glide.with(binding.coverImageView)
                     .load(category.getCoverUrl())
-                    .apply(new RequestOptions().transform(new RoundedCorners(32))) // Скругление углов
+                    .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(16))) // Скругление углов
                     .into(binding.coverImageView);
 
             Log.i("SONGS", String.valueOf(category.getSongs().size()) + " " + category.getName()); //Логирование

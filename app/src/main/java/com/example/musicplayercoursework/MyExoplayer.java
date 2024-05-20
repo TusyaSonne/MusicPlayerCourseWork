@@ -50,6 +50,15 @@ public class MyExoplayer {
 
     }
 
+    public static void stopPlaying() {
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+            currentSong = null;
+        }
+    }
+
     public static void updateCount() {
         if (currentSong != null) {
             String id = currentSong.getId();

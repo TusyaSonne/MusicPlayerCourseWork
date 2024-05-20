@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayercoursework.MyExoplayer;
@@ -66,7 +67,7 @@ public class SectionSongListAdapter extends RecyclerView.Adapter<SectionSongList
                         // Использование библиотеки Glide для загрузки и отображения изображений
                         Glide.with(binding.songCoverImageView)
                                 .load(song.getCoverUrl())
-                                .apply(new RequestOptions().transform(new RoundedCorners(32))) // Скругление углов
+                                .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(16))) // Скругление углов
                                 .into(binding.songCoverImageView);
                         binding.getRoot().setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -75,6 +76,8 @@ public class SectionSongListAdapter extends RecyclerView.Adapter<SectionSongList
                                 v.getContext().startActivity(new Intent(v.getContext(), PlayerActivity.class));
                             }
                         });
+                        // Установка фокуса для того чтобы большие названия песен прокручивались
+                        binding.songTitleTextView.setSelected(true);
                     });
         }
     }
