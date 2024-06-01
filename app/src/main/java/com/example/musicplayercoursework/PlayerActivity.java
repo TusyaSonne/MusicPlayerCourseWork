@@ -130,6 +130,14 @@ public class PlayerActivity extends AppCompatActivity {
             return false;
         }
 
+        if (currentUser.isAnonymous()) {
+            // Текущий пользователь не авторизован
+            binding.addToPlaylistButton.setVisibility(View.GONE);
+            binding.playlistAddedIcon.setVisibility(View.GONE);
+            binding.songAddedTextview.setVisibility(View.GONE);
+            return false;
+        }
+
         String userId = currentUser.getUid();
 
         FirebaseFirestore.getInstance().collection("user_playlists").document(userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView navHeaderEmail = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null && !firebaseUser.isAnonymous()) {
             navHeaderEmail.setText(firebaseUser.getEmail());
         } else {
-            navHeaderEmail.setText("Ваша почта");
+            navHeaderEmail.setText("Гость");
         }
 
     }

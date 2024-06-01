@@ -103,6 +103,15 @@
                 android:textColorHint="@color/white"
                 android:gravity="center"/>
 
+            <TextView
+                android:id="@+id/login_as_guest_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Войти как гость"
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/goto_signup_btn"/>
+
 
 
         </LinearLayout>

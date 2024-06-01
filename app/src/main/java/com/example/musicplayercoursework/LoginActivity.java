@@ -59,6 +59,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
+
+        binding.loginAsGuestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginAsGuest();
+            }
+        });
     }
 
     void setInProgress(Boolean inProgress) {
@@ -91,6 +98,35 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    void loginAsGuest() {
+        // Создать новый экземпляр неавторизованного пользователя
+        FirebaseUser anonymousUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (anonymousUser == null) {
+            FirebaseAuth.getInstance().signInAnonymously()
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            // Перейти на экран MainActivity
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Ошибка авторизации", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            // Перейти на экран MainActivity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
 
     @Override
     protected void onResume() {
