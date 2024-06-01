@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/custom_white">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,6 +32,15 @@
             android:text="@string/about_program"
             android:textSize="22dp"
             android:gravity="center"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="281.5dp"
+            android:layout_height="211.5dp"
+            android:src="@drawable/about_program"
+            android:layout_marginBottom="18dp"
+            app:shapeAppearanceOverlay="@style/roundImageView"/>
 
     </RelativeLayout>
 </RelativeLayout>
