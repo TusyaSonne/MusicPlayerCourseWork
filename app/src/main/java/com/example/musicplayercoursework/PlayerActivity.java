@@ -73,10 +73,19 @@ public class PlayerActivity extends AppCompatActivity {
             isSongInPlaylist(currentSong.getId());
         }
 
+        //Добавление кнопки в плейлист
         binding.addToPlaylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addSongToPlaylist();
+            }
+        });
+
+        //Удаление кнопки из плейлиста
+        binding.removeFromPlaylistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeSongFromPlaylist();
             }
         });
 
@@ -117,6 +126,7 @@ public class PlayerActivity extends AppCompatActivity {
                         binding.addToPlaylistButton.setVisibility(View.GONE);
                         binding.playlistAddedIcon.setVisibility(View.VISIBLE);
                         binding.songAddedTextview.setVisibility(View.VISIBLE);
+                        binding.removeFromPlaylistButton.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -135,6 +145,7 @@ public class PlayerActivity extends AppCompatActivity {
             binding.addToPlaylistButton.setVisibility(View.GONE);
             binding.playlistAddedIcon.setVisibility(View.GONE);
             binding.songAddedTextview.setVisibility(View.GONE);
+            binding.removeFromPlaylistButton.setVisibility(View.GONE);
             return false;
         }
 
@@ -149,17 +160,61 @@ public class PlayerActivity extends AppCompatActivity {
                     binding.addToPlaylistButton.setVisibility(View.GONE);
                     binding.playlistAddedIcon.setVisibility(View.VISIBLE);
                     binding.songAddedTextview.setVisibility(View.VISIBLE);
+                    // Кнопка удаления песни из плейлиста
+                    binding.removeFromPlaylistButton.setVisibility(View.VISIBLE);
                 } else {
                     // Песня не добавлена в плейлист
                     binding.addToPlaylistButton.setVisibility(View.VISIBLE);
                     binding.playlistAddedIcon.setVisibility(View.GONE);
                     binding.songAddedTextview.setVisibility(View.GONE);
+                    binding.removeFromPlaylistButton.setVisibility(View.GONE);
                 }
             }
         });
 
         // Возвращаем false по умолчанию, так как метод get() является асинхронным
         return false;
+    }
+
+    private void removeSongFromPlaylist() {
+        // Получить текущего пользователя
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            // Обработать ситуацию, когда пользователь не авторизован
+            return;
+        }
+
+        String userId = currentUser.getUid();
+
+        // Получить идентификатор текущей песни
+        String songId = MyExoplayer.getCurrentSong().getId();
+
+        // Получить документ плейлиста пользователя из Firestore
+        FirebaseFirestore.getInstance().collection("user_playlists").document(userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                PlayListModel playlist = documentSnapshot.toObject(PlayListModel.class);
+                if (playlist == null) {
+                    // Плейлист не существует, нет необходимости удалять песню
+                    return;
+                }
+
+                // Удалить песню из плейлиста
+                playlist.getSongs().remove(songId);
+
+                // Сохранить обновленный плейлист в Firestore
+                FirebaseFirestore.getInstance().collection("user_playlists").document(userId).set(playlist).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(), "Песня успешно удалена из плейлиста", Toast.LENGTH_SHORT).show();
+                        binding.addToPlaylistButton.setVisibility(View.VISIBLE);
+                        binding.playlistAddedIcon.setVisibility(View.GONE);
+                        binding.songAddedTextview.setVisibility(View.GONE);
+                        binding.removeFromPlaylistButton.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
 
