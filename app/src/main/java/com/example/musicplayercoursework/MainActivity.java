@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(view);
 
         getCategories();
+
+        // Установка плейлистов
         setupSection("section_1", binding.section1MainLayout, binding.section1Title, binding.section1RecyclerView);
         setupSection("section_2", binding.section2MainLayout, binding.section2Title, binding.section2RecyclerView);
         setupSection("section_3", binding.section3MainLayout, binding.section3Title, binding.section3RecyclerView);
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         handleOnBackPressed();
 
 
-        //Бургер-меню
+        // Бургер-меню
 
         Toolbar toolbar = binding.customToolbar;
         setSupportActionBar(toolbar);
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    //уведомление о текущей песне
+    // Уведомление о текущей песне
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE) {
             CharSequence name = "MusicChannel";
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    //выбор фрагментов на бургер-меню
+    // Выбор фрагментов на бургер-меню
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
@@ -439,6 +441,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-
 }
